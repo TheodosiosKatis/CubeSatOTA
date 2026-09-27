@@ -1,0 +1,217 @@
+
+╔══════════════════════════════════════════════════════════════╗
+║  CubeSat OTA Update Simulation                               ║
+║  MSc Thesis: Secure and Dependable OTA for CubeSats (F')    ║
+║  Theodosios Katis  —  NKUA 2026                              ║
+╚══════════════════════════════════════════════════════════════╝
+[37260] [GS ] Generating Ed25519 key pair...
+[37265] [GS ] Public key (first 8 bytes): 3b57b07ef711e7e7...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SCENARIO 1 — Normal Update (Happy Path)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[37265] [GS ] Firmware image: 8192 bytes  (simulated FSW v6)
+[37266] [GS ] SHA-256:        0adde8b9906720a67a7fad7a6dcd5a61...
+[37266] [GS ] Package size:   116 B header + 8192 B image = 8308 B total
+[37266] [TLM] OTA_STATE=IDLE                  OTA_ERROR=NONE  transitions=1
+[37266] [OTA] OTAU header: version=6  size=8192 B  chunks=16
+[37266] [OTA] IDLE                 → RECEIVING
+[37266] [TLM] OTA_STATE=RECEIVING             OTA_ERROR=NONE  transitions=2
+[37266] [OTA] Session token 0xDEADBEEF  chunks expected: 16
+[37266] [UPL] Session 0xDEADBEEF  16 chunks × 512 B
+[37266] [UPL]   Chunk   0/15  CRC-16=0x6036 ✓
+[37266] [UPL]   Chunk   4/15  CRC-16=0x76C1 ✓
+[37266] [UPL]   Chunk   8/15  CRC-16=0xD0C9 ✓
+[37266] [UPL]   Chunk  12/15  CRC-16=0x4E02 ✓
+[37266] [UPL]   Chunk  15/15  CRC-16=0x1223 ✓
+[37266] [UPL] All 16 chunks received  (8192 bytes reassembled)
+[37266] [OTA] Reception complete: 8192 bytes in 16 chunks
+[37266] [OTA] RECEIVING            → VERIFYING_INTEGRITY
+[37266] [TLM] OTA_STATE=VERIFYING_INTEGRITY   OTA_ERROR=NONE  transitions=3
+[37266] [INT] SHA-256 computation started (8192 bytes)...
+[37266] [INT]   Computed : 0adde8b9906720a67a7fad7a6dcd5a61...
+[37266] [INT]   Expected : 0adde8b9906720a67a7fad7a6dcd5a61...
+[37266] [INT] SHA-256 MATCH ✓  (0 ms)
+[37266] [OTA] VERIFYING_INTEGRITY  → VERIFYING_AUTH
+[37266] [TLM] OTA_STATE=VERIFYING_AUTH        OTA_ERROR=NONE  transitions=4
+[37266] [AUT] Ed25519 signature verification started...
+[37266] [AUT]   Signature : 28548638a9cc136c...
+[37267] [AUT] Ed25519 VALID ✓  (0 ms)
+[37267] [OTA] VERIFYING_AUTH       → WRITING
+[37267] [TLM] OTA_STATE=WRITING               OTA_ERROR=NONE  transitions=5
+[37267] [STG] Writing Bank B: 8192 bytes in 16 blocks
+[37267] [STG]   Block   0/ 15 written  CRC-16=0xE5FC ✓
+[37267] [STG]   Block   4/ 15 written  CRC-16=0x5703 ✓
+[37267] [STG]   Block   8/ 15 written  CRC-16=0x0D32 ✓
+[37267] [STG]   Block  12/ 15 written  CRC-16=0x37F1 ✓
+[37267] [STG]   Block  15/ 15 written  CRC-16=0x10D6 ✓
+[37267] [STG] Post-write SHA-256 read-back: MATCH ✓
+[37267] [OTA] WRITING              → COMMIT_PENDING
+[37267] [TLM] OTA_STATE=COMMIT_PENDING        OTA_ERROR=NONE  transitions=6
+[37267] [BOT] boot_target → BANK_B
+[37267] [TLM] BOOT_TARGET=BANK_B  BOOT_TRY_COUNT=0
+[37267] [OTA] Reboot scheduled. Handing off to bootloader...
+
+[37267] ━━━  SIMULATED REBOOT  ━━━
+
+[37267] [BOT] Boot from BANK_B (try 1/3)
+[37267] [OTA] COMMIT_PENDING       → VALIDATING
+[37267] [TLM] OTA_STATE=VALIDATING            OTA_ERROR=NONE  transitions=7
+[37267] [OTA] Running Bank B. Health validation begins...
+[37267] [HLT] Health check cycle 1/2
+[37267] [HLT]   Component init ............. ✓
+[37267] [HLT]   Memory integrity ........... ✓
+[37267] [HLT]   Comms subsystem ............ ✓
+[37267] [HLT]   Telemetry flow ............. ✓
+[37267] [HLT] Health cycle 1 PASSED ✓
+[37267] [HLT] Health check cycle 2/2
+[37267] [HLT]   Component init ............. ✓
+[37267] [HLT]   Memory integrity ........... ✓
+[37267] [HLT]   Comms subsystem ............ ✓
+[37267] [HLT]   Telemetry flow ............. ✓
+[37267] [HLT] Health cycle 2 PASSED ✓
+[37267] [OTA] VALIDATING           → ACTIVE
+[37267] [TLM] OTA_STATE=ACTIVE                OTA_ERROR=NONE  transitions=8
+[37267] [BOT] BANK_B confirmed stable; boot_try_count reset to 0
+[37267] [TLM] BOOT_TRY_COUNT=0
+[37267] [STG] Bank B promoted to active; Bank A updated
+[37267] [TLM] FIRMWARE_VERSION: 5 → 6
+[37267] [TLM] OTA_UPDATE_COUNT: 1
+
+  ✅  Update complete. Active firmware: v6  Bank B confirmed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SCENARIO 2 — Tampered Image (Integrity Failure)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[37267] [GS ] Preparing package (identical to Scenario 1)...
+[37267] [ATK] ⚠  Attacker: flipping byte 0 of chunk 0 in transit
+[37267] [TLM] OTA_STATE=IDLE                  OTA_ERROR=NONE  transitions=1
+[37267] [OTA] OTAU header: version=7  size=8192 B  chunks=16
+[37267] [OTA] IDLE                 → RECEIVING
+[37267] [TLM] OTA_STATE=RECEIVING             OTA_ERROR=NONE  transitions=2
+[37267] [OTA] Session token 0xCAFEBABE  chunks expected: 16
+[37267] [UPL] Session 0xCAFEBABE  16 chunks × 512 B
+[37267] [UPL] ⚠  Injecting corruption into chunk 0
+[37267] [UPL]   Chunk   0/15  CRC-16 FAIL ✗  (0xEC3E≠0xE5E0)
+[37267] [OTA] Uplink reception failed (CRC error)
+[37267] [OTA] ERROR state — INTEGRITY_FAIL
+[37267] [TLM] OTA_STATE=ERROR                 OTA_ERROR=INTEGRITY_FAIL  transitions=3
+[37267] [OTA] ERROR → IDLE  (cleanup complete)
+[37267] [TLM] OTA_LAST_ERROR: INTEGRITY_FAIL
+
+  ❌  Tampered update rejected at CRC check. Active firmware unchanged (v6).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SCENARIO 3 — Forged Signature (Authentication Failure)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[37267] [ATK] ⚠  Attacker: building package signed with a DIFFERENT key
+[37267] [TLM] OTA_STATE=IDLE                  OTA_ERROR=NONE  transitions=1
+[37267] [OTA] OTAU header: version=7  size=8192 B  chunks=16
+[37267] [OTA] IDLE                 → RECEIVING
+[37267] [TLM] OTA_STATE=RECEIVING             OTA_ERROR=NONE  transitions=2
+[37267] [OTA] Session token 0x0BADF00D  chunks expected: 16
+[37268] [UPL] Session 0x0BADF00D  16 chunks × 512 B
+[37268] [UPL]   Chunk   0/15  CRC-16=0x0623 ✓
+[37268] [UPL]   Chunk   4/15  CRC-16=0x10D4 ✓
+[37268] [UPL]   Chunk   8/15  CRC-16=0xB6DC ✓
+[37268] [UPL]   Chunk  12/15  CRC-16=0x2817 ✓
+[37268] [UPL]   Chunk  15/15  CRC-16=0x7436 ✓
+[37268] [UPL] All 16 chunks received  (8192 bytes reassembled)
+[37268] [OTA] Reception complete: 8192 bytes in 16 chunks
+[37268] [OTA] RECEIVING            → VERIFYING_INTEGRITY
+[37268] [TLM] OTA_STATE=VERIFYING_INTEGRITY   OTA_ERROR=NONE  transitions=3
+[37268] [INT] SHA-256 computation started (8192 bytes)...
+[37268] [INT]   Computed : 0adde8b9906720a67a7fad7a6dcd5a61...
+[37268] [INT]   Expected : 0adde8b9906720a67a7fad7a6dcd5a61...
+[37268] [INT] SHA-256 MATCH ✓  (0 ms)
+[37268] [OTA] VERIFYING_INTEGRITY  → VERIFYING_AUTH
+[37268] [TLM] OTA_STATE=VERIFYING_AUTH        OTA_ERROR=NONE  transitions=4
+[37268] [AUT] Ed25519 signature verification started...
+[37268] [AUT]   Signature : fb205d3e85d98e6a...
+[37268] [AUT] Ed25519 INVALID ✗  (0 ms)
+[37268] [OTA] ERROR state — AUTH_FAIL
+[37268] [TLM] OTA_STATE=ERROR                 OTA_ERROR=AUTH_FAIL  transitions=5
+[37268] [OTA] ERROR → IDLE  (cleanup complete)
+[37268] [TLM] OTA_LAST_ERROR: AUTH_FAIL
+
+  ❌  Forged update rejected at Ed25519 verification. Active firmware unchanged (v6).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SCENARIO 4 — Health Validation Failure (Automatic Rollback)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[37268] [GS ] Preparing legitimate update package...
+[37268] [SIM] Health monitor configured to FAIL on cycle 1 (comms subsystem)
+[37268] [TLM] OTA_STATE=IDLE                  OTA_ERROR=NONE  transitions=1
+[37268] [OTA] OTAU header: version=7  size=8192 B  chunks=16
+[37268] [OTA] IDLE                 → RECEIVING
+[37268] [TLM] OTA_STATE=RECEIVING             OTA_ERROR=NONE  transitions=2
+[37268] [OTA] Session token 0x1337C0DE  chunks expected: 16
+[37268] [UPL] Session 0x1337C0DE  16 chunks × 512 B
+[37268] [UPL]   Chunk   0/15  CRC-16=0xA29F ✓
+[37268] [UPL]   Chunk   4/15  CRC-16=0x7F6D ✓
+[37269] [UPL]   Chunk   8/15  CRC-16=0xD164 ✓
+[37269] [UPL]   Chunk  12/15  CRC-16=0x3673 ✓
+[37269] [UPL]   Chunk  15/15  CRC-16=0x7679 ✓
+[37269] [UPL] All 16 chunks received  (8192 bytes reassembled)
+[37269] [OTA] Reception complete: 8192 bytes in 16 chunks
+[37269] [OTA] RECEIVING            → VERIFYING_INTEGRITY
+[37269] [TLM] OTA_STATE=VERIFYING_INTEGRITY   OTA_ERROR=NONE  transitions=3
+[37269] [INT] SHA-256 computation started (8192 bytes)...
+[37269] [INT]   Computed : 9c480528762e0aa4de3d10d3e5e3ca17...
+[37269] [INT]   Expected : 9c480528762e0aa4de3d10d3e5e3ca17...
+[37269] [INT] SHA-256 MATCH ✓  (0 ms)
+[37269] [OTA] VERIFYING_INTEGRITY  → VERIFYING_AUTH
+[37269] [TLM] OTA_STATE=VERIFYING_AUTH        OTA_ERROR=NONE  transitions=4
+[37269] [AUT] Ed25519 signature verification started...
+[37269] [AUT]   Signature : b428b3ed3a039aa1...
+[37269] [AUT] Ed25519 VALID ✓  (0 ms)
+[37269] [OTA] VERIFYING_AUTH       → WRITING
+[37269] [TLM] OTA_STATE=WRITING               OTA_ERROR=NONE  transitions=5
+[37269] [STG] Writing Bank B: 8192 bytes in 16 blocks
+[37269] [STG]   Block   0/ 15 written  CRC-16=0xBEF6 ✓
+[37269] [STG]   Block   4/ 15 written  CRC-16=0xC70C ✓
+[37269] [STG]   Block   8/ 15 written  CRC-16=0x953C ✓
+[37269] [STG]   Block  12/ 15 written  CRC-16=0xD623 ✓
+[37269] [STG]   Block  15/ 15 written  CRC-16=0xED2F ✓
+[37269] [STG] Post-write SHA-256 read-back: MATCH ✓
+[37269] [OTA] WRITING              → COMMIT_PENDING
+[37269] [TLM] OTA_STATE=COMMIT_PENDING        OTA_ERROR=NONE  transitions=6
+[37269] [BOT] boot_target → BANK_B
+[37269] [TLM] BOOT_TARGET=BANK_B  BOOT_TRY_COUNT=0
+[37269] [OTA] Reboot scheduled. Handing off to bootloader...
+
+[37269] ━━━  SIMULATED REBOOT  ━━━
+
+[37269] [BOT] Boot from BANK_B (try 1/3)
+[37269] [OTA] COMMIT_PENDING       → VALIDATING
+[37269] [TLM] OTA_STATE=VALIDATING            OTA_ERROR=NONE  transitions=7
+[37269] [OTA] Running Bank B. Health validation begins...
+[37269] [HLT] Health check cycle 1/2
+[37269] [HLT]   Component init ............. ✓
+[37269] [HLT]   Memory integrity ........... ✓
+[37269] [HLT]   Comms subsystem ............ ✗  (not responding)
+[37269] [OTA] VALIDATING           → ROLLBACK
+[37269] [TLM] OTA_STATE=ROLLBACK              OTA_ERROR=NONE  transitions=8
+[37269] [OTA] Rollback reason: INTEGRITY_FAIL
+[37269] [BOT] boot_target → BANK_A
+[37269] [TLM] BOOT_TARGET=BANK_A  BOOT_TRY_COUNT=1
+
+[37269] ━━━  SIMULATED REBOOT (Bank A)  ━━━
+
+[37269] [TLM] OTA_STATE: ROLLBACK
+[37269] [TLM] OTA_LAST_ERROR: INTEGRITY_FAIL
+
+  🔄  Rollback complete. Satellite restored to Bank A (v6).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Simulation complete. All four scenarios demonstrated.
+  Cryptographic overhead summary (desktop host, not embedded):
+    SHA-256 (8 KB image):   < 1 ms  (ARM Cortex-M4: ~2-5 ms)
+    Ed25519 verification:   < 1 ms  (ARM Cortex-M4: ~3-8 ms)
+    CRC-16 per 512 B chunk: < 0.1 ms (any platform)
+  Overhead is dominated by CCSDS uplink time, not crypto.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
